@@ -1,0 +1,16 @@
+#!/bin/sh
+# 스테이징된 경로가 scope 라벨 하나에만 속하는지 검사한다.
+
+. "$(dirname "$0")/../common/scope.sh"
+
+scopes=$(staged_scopes)
+count=$(printf '%s\n' "$scopes" | grep -c .)
+
+[ "$count" -le 1 ] && exit 0
+
+{
+  echo "커밋 거부: 한 커밋에 scope가 둘 이상 섞였다."
+  staged_paths_with_scope | sort | sed 's/^/  /'
+  echo "scope별로 커밋을 나눠라: git reset 후 한 scope의 경로만 git add 해서 커밋한다."
+} >&2
+exit 1
