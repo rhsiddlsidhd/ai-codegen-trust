@@ -17,13 +17,28 @@ Oct 7, 2026 · @DevYoung
 
 ## Scope 토큰
 
-다른 파일은 코드만 참조하고, 설명은 여기서만 관리한다.
+다른 파일은 코드만 참조하고, 설명은 여기서만 관리한다. 토큰을 바꾸면 이 표와 `scripts/common/scope.sh`를 함께 고친다.
 
 | 토큰 | 범위 |
 | --- | --- |
 | `guarded` | `guarded/` 안의 변경 |
 | `unguarded` | `unguarded/` 안의 변경 |
-| `docs` | `docs/common/` 안의 변경 |
-| `root` | 위 셋에 안 들어가는 루트 파일(`README.md`, `AGENTS.md` 등) 변경 |
+| `docs` | `docs/` 안의 변경 (현재는 `docs/common/`) |
+| `root` | 위 셋에 안 들어가는 모든 경로(`README.md`, `AGENTS.md`, `scripts/` 등)의 변경 |
 
 한 커밋/브랜치/PR은 scope 토큰 하나에만 대응해야 한다 — 두 프로젝트 경로를 섞지 않는다.
+
+## Git hook
+
+위 scope 규칙은 `scripts/git/`의 hook이 커밋 시점에 검사한다. 경로 → scope 판정은 `scripts/common/scope.sh`가 한다.
+
+- `pre-commit` — 스테이징한 경로가 scope 하나에만 속하는지
+- `commit-msg` — 메시지의 scope가 스테이징한 경로의 scope와 같은지
+
+hook은 `core.hooksPath` 설정으로 연결되며 이 설정은 clone마다 로컬이라, clone마다 한 번 설치한다.
+
+```bash
+sh scripts/git/install-hooks.sh
+```
+
+에이전트는 Git 작업을 시작할 때 `git config --get core.hooksPath`가 비어 있으면 위 명령을 먼저 실행한다. 커밋이 거부되면 거부 메시지를 따라 scope별로 커밋을 나누고, `--no-verify`로 우회하지 않는다.
