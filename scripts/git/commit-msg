@@ -10,14 +10,11 @@ reject() {
 }
 
 subject=$(head -n 1 "$1")
-scope=$(printf '%s' "$subject" | sed -nE 's/^[a-z]+\(([^)]*)\)!?: .*/\1/p')
+scope=$(message_scope "$subject")
 
 [ -n "$scope" ] || reject "scope가 없다. '{prefix}({scope}): {message}' 형식으로 써라. (받은 메시지: $subject)"
 
-case "$scope" in
-  guarded|unguarded|docs|root) ;;
-  *) reject "'$scope'는 scope가 아니다. guarded, unguarded, docs, root 중 하나를 써라." ;;
-esac
+is_scope "$scope" || reject "'$scope'는 scope가 아니다. guarded, unguarded, docs, root 중 하나를 써라."
 
 actual=$(staged_scopes)
 [ -z "$actual" ] && exit 0
