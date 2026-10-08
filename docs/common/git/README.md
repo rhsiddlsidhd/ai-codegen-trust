@@ -42,3 +42,12 @@ sh scripts/git/install-hooks.sh
 ```
 
 에이전트는 Git 작업을 시작할 때 `git config --get core.hooksPath`가 비어 있으면 위 명령을 먼저 실행한다. 커밋이 거부되면 거부 메시지를 따라 scope별로 커밋을 나누고, `--no-verify`로 우회하지 않는다.
+
+## CI 검증
+
+로컬 hook을 거치지 않은 커밋(설치 누락, `--no-verify`)도 PR에서 막는다. `.github/workflows/commit-scope.yml`이 `scripts/ci/check-commit-scopes.sh`를 실행해 아래를 검사한다.
+
+- 각 커밋의 메시지 scope가 유효한 scope 토큰이고, 그 커밋이 바꾼 경로의 scope와 같은지
+- PR 제목의 scope가 모든 커밋의 scope와 같은지
+
+`main`은 ruleset으로 보호한다 — PR 필수, 필수 체크 `check` 통과, force push·삭제 금지. 체크가 실패하면 로그가 어느 커밋이 왜 걸렸는지 알려주므로, 작업 브랜치의 해당 커밋을 고쳐 다시 push한다.
