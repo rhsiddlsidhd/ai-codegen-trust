@@ -2,7 +2,7 @@
 
 Oct 6, 2026 · @DevYoung
 
-주문 생성·조회·쿠폰 적용·결제·취소·환불만 다룬다. 상품은 [products.md](./products.md), 쿠폰은 [coupons.md](./coupons.md), 지갑은 [wallet.md](./wallet.md), 에러 코드는 [errors.md](./errors.md)를 따른다.
+주문 생성·조회·쿠폰 적용/해제·결제·취소·환불만 다룬다. 상품은 [products.md](./products.md), 쿠폰은 [coupons.md](./coupons.md), 지갑은 [wallet.md](./wallet.md), 에러 코드는 [errors.md](./errors.md)를 따른다.
 
 ## 타입
 
@@ -72,7 +72,7 @@ Oct 6, 2026 · @DevYoung
 에러: ORDER_NOT_FOUND, INVALID_TRANSITION, COUPON_NOT_APPLICABLE, MIN_AMOUNT_NOT_MET.
 
 1. `getOrder(orderId)`로 현재 주문 확보(없으면 404)
-2. 선택한 쿠폰으로 할인액·결제금액을 계산한다 — `coupon`은 `getCoupons()` 목록 중 화면에서 선택한 것([coupons.md](./coupons.md))
+2. 선택한 쿠폰으로 할인액·결제금액을 계산한다 — `coupon`은 `getCoupons()` 목록 중 화면에서 선택한 것, 계산 규칙은 [coupons.md](./coupons.md#할인-계산)
 3. 실패면 에러코드만 전달, 기존 선택 유지 — `saveOrder` 안 함
 4. 성공하면 `order.couponCode`/`discount`/`payable`을 갈아끼우고 `saveOrder(order)`. `subtotal`은 그대로
 
@@ -89,13 +89,21 @@ Oct 6, 2026 · @DevYoung
 }
 ```
 
+### 쿠폰 해제 (CREATED 상태에서만)
+
+선택된 쿠폰을 다시 눌러 적용을 취소한다([wireframe.md](../ui/wireframe.md#paymentid)). 에러: ORDER_NOT_FOUND, INVALID_TRANSITION.
+
+1. `getOrder(orderId)`로 현재 주문 확보(없으면 404)
+2. `couponCode`를 null, `discount`를 0, `payable`을 `subtotal`로 되돌리고 `saveOrder(order)`
+
 ### 결제 시도 (CREATED → PAID | PAYMENT_FAILED)
 
 결제 수단 선택 없음 — 지갑 현금과 `payable`을 비교해 성공/실패를 결정한다. 에러: ORDER_NOT_FOUND, INVALID_TRANSITION. PAID/PAYMENT_FAILED는 둘 다 정상 결과이지 에러가 아니다.
 
-1. `getOrder(orderId)` + `getWallet()`
+1. `getOrder(orderId)` + `getWallet()` + `getProducts()`
 2. 지갑 현금과 `payable`을 비교해 PAID/PAYMENT_FAILED를 결정한다
 3. `saveOrder(order)`. 성공(PAID)이면 `saveWallet(wallet)`도 호출(차감 반영) — 실패(PAYMENT_FAILED)면 지갑 변화 없어서 안 해도 됨
+4. 실패(PAYMENT_FAILED)면 재고를 품목 수량만큼 복원하고 `updateStock(stock)`. PAYMENT_FAILED는 재결제 경로가 없는 종료 상태라, 복원하지 않으면 생성 때 차감한 재고가 묶인 채 남는다
 
 ```json
 {
