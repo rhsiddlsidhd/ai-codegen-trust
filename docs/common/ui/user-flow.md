@@ -22,11 +22,11 @@ flowchart TD
     Failed --> End3([종료])
 
     DirectAccess([북마크 등으로<br/>직접 접근]) --> GuardCheck{주문 존재 &&<br/>이 라우트 상태 맞음?}
-    GuardCheck -->|아니오| NotFound["주문 없음(404)<br/>back-to-cart-button"]
+    GuardCheck -->|아니오| NotFound["주문 없음(404)<br/>장바구니로 버튼"]
     GuardCheck -->|예| Payment
     GuardCheck -->|예| Paid
     GuardCheck -->|예| Failed
-    NotFound -->|돌아가기 클릭| Cart
+    NotFound -->|장바구니로 클릭| Cart
 ```
 
 ## 분기 이유
