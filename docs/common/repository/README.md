@@ -8,6 +8,6 @@ Oct 6, 2026 · @DevYoung
 
 - [errors.md](./errors.md) — 도메인 모듈 공통 에러 코드(`error.code`/`error.message`). 다른 파일은 코드만 참조한다
 - [products.md](./products.md) — `getProducts()`/`updateStock()`, `Product`/`StockMap` 타입
-- [coupons.md](./coupons.md) — `getCoupons()`, `Coupon`/`condition`/`benefit` 타입
+- [coupons.md](./coupons.md) — `getCoupons()`, `Coupon`/`condition`/`benefit` 타입, 할인 계산 규칙
 - [orders.md](./orders.md) — `getOrder()`/`saveOrder()`, 동작별(생성/쿠폰/결제/취소/환불) 처리 흐름, `Order`/`OrderItem` 타입
 - [wallet.md](./wallet.md) — `getWallet()`/`saveWallet()`, `Wallet` 타입, 결제/환불에 따른 cash 차감·복원 시점
