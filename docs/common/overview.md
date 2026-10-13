@@ -2,7 +2,7 @@
 
 Oct 7, 2026 · @DevYoung
 
-이 문서는 baseline/guarded 두 프로젝트가 똑같이 참조하는 단일 기획 문서(PRD 역할)다. 여기 없는 내용은 각자의 문서를 따른다 — 기술 제약은 [tech-stack.md](./architecture/tech-stack.md), 화면 레이아웃은 [ui/wireframe.md](./ui/wireframe.md), 노출 계약은 [docs/common/repository/](./repository/). 실험 자체(가드레일 비교)의 상세 설계는 [README.md](../../README.md)를 따른다.
+이 문서는 unguarded/guarded 두 프로젝트가 똑같이 참조하는 단일 기획 문서(PRD 역할)다. 여기 없는 내용은 각자의 문서를 따른다 — 기술 제약은 [tech-stack.md](./architecture/tech-stack.md), 화면 레이아웃은 [ui/wireframe.md](./ui/wireframe.md), 노출 계약은 [docs/common/repository/](./repository/). 실험 자체(가드레일 비교)의 상세 설계는 [README.md](../../README.md)를 따른다.
 
 ## 목차
 
