@@ -23,7 +23,7 @@ src/
     index.ts
 
   layout/
-    GlobalLayout.tsx          # 헤더(wallet-cash) + 전역 토스트 레이어, 세 라우트가 공유(components.md "전역 요소 중복 금지")
+    GlobalLayout.tsx          # 헤더(보유 현금) + 전역 토스트 레이어, 세 라우트가 공유(components.md "전역 요소 중복 금지")
 
   components/
     ui/                       # shadcn CLI 설치 산출물(button.tsx, input.tsx, ...)

@@ -2,7 +2,7 @@
 
 Oct 6, 2026 · @DevYoung
 
-도메인별 레포지토리 모듈 함수 계약과 공통 에러 코드를 정리한 디렉토리다. 서버가 없어서(네트워크 호출 자체가 없음, [tech-stack.md](../architecture/tech-stack.md)) 여기서 다루는 건 HTTP 엔드포인트가 아니라 `src/repository/index.ts`가 노출하는 함수 시그니처다. UI 라우트와 data-testid는 [wireframe.md](../ui/wireframe.md)를 따른다.
+도메인별 레포지토리 모듈 함수 계약과 공통 에러 코드를 정리한 디렉토리다. 서버가 없어서(네트워크 호출 자체가 없음, [tech-stack.md](../architecture/tech-stack.md)) 여기서 다루는 건 HTTP 엔드포인트가 아니라 `src/repository/index.ts`가 노출하는 함수 시그니처다. UI 라우트는 [wireframe.md](../ui/wireframe.md)를 따른다.
 
 ## 목차
 
