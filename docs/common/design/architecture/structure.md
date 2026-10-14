@@ -44,6 +44,12 @@ src/
       index.ts
     index.ts
 
+  hooks/                     # 커스텀 훅(이름이 use로 시작, 내부에서 다른 훅을 호출하는 상태 로직 재사용)
+    {topic}/
+      {placeholder}.ts
+      index.ts
+    index.ts
+
   repository/
     Repository.ts             # class Repository
     index.ts                  # export const repository = new Repository()
@@ -82,7 +88,7 @@ src/
 ### 폴더 네이밍 규칙
 
 - `{topic}`/`{placeholder}`는 실제 작성 시 치환되는 자리표시자다. `{topic}`은 폴더명(주제), `{placeholder}`는 그 폴더 안 구현 파일명
-- pages/context/domain/types/constants/utils/lib 공통 규칙: 주제당 폴더 하나, 폴더 안엔 구현 파일 + `index.ts`(barrel)
+- pages/context/hooks/domain/types/constants/utils/lib 공통 규칙: 주제당 폴더 하나, 폴더 안엔 구현 파일 + `index.ts`(barrel)
 - barrel은 2단이다 — 안쪽 `{topic}/index.ts`는 그 폴더 안 파일들을 모으고, 디렉토리 최상위 `index.ts`는 전체를 다시 재노출한다. 안쪽이 있어서 토픽 폴더 내부 파일 구성이 바뀌어도 최상위는 안 바뀐다
 
 
