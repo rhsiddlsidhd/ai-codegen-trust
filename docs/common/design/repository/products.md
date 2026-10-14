@@ -42,10 +42,17 @@ StockMap = { [productId: string]: number }
 
 `Repository`의 메서드다([README.md](./README.md)).
 
+**public**
+
 | 메서드 | 시그니처 | 설명 |
 | --- | --- | --- |
 | getProducts | `(): Product[]` | sessionStorage에서 상품 목록을 읽는다. 저장소가 비어 있으면(첫 로드) 아래 시드 데이터로 채운 뒤 반환한다 |
-| updateStock | `(stock: StockMap): void` | 도메인 함수가 계산한 새 `StockMap`으로 `products` 키의 각 `Product.stock`을 덮어쓴다 |
+
+**private**
+
+| 메서드 | 시그니처 | 설명 |
+| --- | --- | --- |
+| updateStock | `(stock: StockMap): void` | 주문 동작 메서드([orders.md](./orders.md#메서드-내부-처리))가 규칙 함수로 계산한 새 `StockMap`으로 `products` 키의 각 `Product.stock`을 덮어쓴다 |
 
 ## 시드 데이터(고정)
 

@@ -2,7 +2,7 @@
 
 Oct 7, 2026 · @DevYoung
 
-코드가 어떤 폴더로 나뉘고, 데이터가 어떤 순서로 오가는지만 다룬다. 기술 선택은 [tech-stack.md](./tech-stack.md), 저장 계약은 [design/repository/](../repository/), 규칙 함수는 [design/domain/](../domain/), 전역 상태와 액션은 [design/context/](../context/)를 따른다.
+코드가 어떤 폴더로 나뉘고, 데이터가 어떤 순서로 오가는지만 다룬다. 기술 선택은 [tech-stack.md](./tech-stack.md), 저장·규칙 계약은 [design/repository/](../repository/), 전역 상태와 액션은 [design/context/](../context/)를 따른다.
 
 ## 목차
 
@@ -44,15 +44,18 @@ src/
       index.ts
     index.ts
 
-  repository/
-    Repository.ts             # class Repository
-    index.ts                  # export const repository = new Repository()
-
-  domain/                     # 비즈니스 규칙 순수 함수, 저장소·화면을 모름
+  hooks/                     # 커스텀 훅(이름이 use로 시작, 내부에서 다른 훅을 호출하는 상태 로직 재사용)
     {topic}/
       {placeholder}.ts
       index.ts
     index.ts
+
+  repository/                 # 서버 역할: public 메서드만 바깥에 노출(repository/README.md)
+    Repository.ts             # class Repository — 읽기, 주문 동작(읽기 → 규칙 → 저장), private 저장
+    rules/                    # 비즈니스 규칙 순수 함수, 저장소·화면을 모름. Repository만 호출
+      {placeholder}.ts
+      index.ts
+    index.ts                  # export const repository = new Repository()
 
   types/
     {topic}/
@@ -82,7 +85,7 @@ src/
 ### 폴더 네이밍 규칙
 
 - `{topic}`/`{placeholder}`는 실제 작성 시 치환되는 자리표시자다. `{topic}`은 폴더명(주제), `{placeholder}`는 그 폴더 안 구현 파일명
-- pages/context/domain/types/constants/utils/lib 공통 규칙: 주제당 폴더 하나, 폴더 안엔 구현 파일 + `index.ts`(barrel)
+- pages/context/hooks/types/constants/utils/lib 공통 규칙: 주제당 폴더 하나, 폴더 안엔 구현 파일 + `index.ts`(barrel)
 - barrel은 2단이다 — 안쪽 `{topic}/index.ts`는 그 폴더 안 파일들을 모으고, 디렉토리 최상위 `index.ts`는 전체를 다시 재노출한다. 안쪽이 있어서 토픽 폴더 내부 파일 구성이 바뀌어도 최상위는 안 바뀐다
 
 
@@ -92,8 +95,8 @@ src/
 flowchart LR
     Page["페이지"] -->|액션 호출| OrderCtx["OrderContext 액션"]
     Page -->|읽기 전용 조회| Repo["repository (싱글턴)"]
-    OrderCtx --> Domain["domain 순수 함수"]
-    OrderCtx <-->|읽기 / 저장| Repo
+    OrderCtx -->|주문 동작 호출 / Result| Repo
+    Repo --> Rules["rules 순수 함수"]
     OrderCtx -->|cash 갱신| WalletCtx["WalletContext"]
     OrderCtx -.->|"실패 (쿠폰 코드 제외)"| Toast["전역 토스트"]
     WalletCtx --> Header["헤더 보유 현금"]
