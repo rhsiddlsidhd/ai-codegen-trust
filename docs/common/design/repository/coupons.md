@@ -2,7 +2,7 @@
 
 Oct 6, 2026 · @DevYoung
 
-쿠폰 조회와 결제금액 계산을 타입 기준으로 다룬다. 쿠폰 종류·목록·할인 방식의 비즈니스 규칙은 [policy.md](../../planning/policy.md#쿠폰), 상품은 [products.md](./products.md), 주문은 [orders.md](./orders.md), 에러 코드는 [errors.md](./errors.md)를 따른다.
+쿠폰 조회, 주문별 사용 가능 분류, 결제금액 계산을 타입 기준으로 다룬다. 쿠폰 종류·목록·할인 방식의 비즈니스 규칙은 [policy.md](../../planning/policy.md#쿠폰), 상품은 [products.md](./products.md), 주문은 [orders.md](./orders.md), 에러 코드는 [errors.md](./errors.md)를 따른다.
 
 ## 목차
 
@@ -48,6 +48,7 @@ Oct 6, 2026 · @DevYoung
 | 메서드 | 시그니처 | 설명 |
 | --- | --- | --- |
 | getCoupons | `(): Coupon[]` | sessionStorage에서 쿠폰 정책 목록을 읽는다. 저장소가 비어 있으면(첫 로드) 아래 시드 데이터로 채운 뒤 반환한다. 쿠폰은 소모되지 않아 쓰기 함수가 없다 |
+| getCouponOptions | `(orderId: string): { usable: Coupon[]; unusable: Coupon[] }` | /payment의 사용 가능/불가 탭 분류. 주문에 대해 규칙 함수 `evaluateCoupon`([orders.md](./orders.md#규칙-함수))이 `ok`면 `usable`, 아니면 `unusable`에 넣는다. 각 배열은 `getCoupons()` 순서를 따른다 |
 
 ## 할인 계산
 
@@ -62,6 +63,15 @@ Oct 6, 2026 · @DevYoung
 - FLAT: `discount = min(value, base)`
 - RATE: `discount = floor(base × value / 100)`, `maxDiscount`가 null이 아니면 `min(그 값, maxDiscount)`
 - `payable = subtotal - discount`
+
+쿠폰 종류별 실패 code(`evaluateCoupon`):
+
+| 쿠폰 종류 | type | 실패 상황 | code |
+| --- | --- | --- | --- |
+| 대상 상품 쿠폰 | C1 | 대상 상품이 주문에 없음 | COUPON_NOT_APPLICABLE |
+| 고액 라인 쿠폰 | C2 | 기준 이상 라인이 없음 | COUPON_NOT_APPLICABLE |
+| 최소 주문금액 쿠폰 | C3 | `subtotal < minOrderAmount` | MIN_AMOUNT_NOT_MET |
+| 전체 주문 쿠폰 | C4 | 없음 | — |
 
 시드 쿠폰 적용 예시:
 

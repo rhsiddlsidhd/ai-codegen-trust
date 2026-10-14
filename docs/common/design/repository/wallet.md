@@ -2,7 +2,7 @@
 
 Oct 6, 2026 · @DevYoung
 
-보유 현금 조회·갱신만 다룬다. 차감/복원은 결제·환불 흐름의 side effect로 [orders.md](./orders.md)에서 호출되고, 여기선 저장소 접근 함수만 다룬다. 언제 얼마나 바뀌는지는 [policy.md](../../planning/policy.md#현금-차감복원-시점)를 따른다.
+보유 현금 조회·갱신만 다룬다. 차감/복원은 결제·환불 메서드([orders.md](./orders.md#메서드-내부-처리)) 안에서 일어나고, 여기선 저장소 접근 함수만 다룬다. 언제 얼마나 바뀌는지는 [policy.md](../../planning/policy.md#현금-차감복원-시점)를 따른다.
 
 ## 목차
 
@@ -22,9 +22,16 @@ Oct 6, 2026 · @DevYoung
 
 `Repository`의 메서드다([README.md](./README.md)).
 
+**public**
+
 | 메서드 | 시그니처 | 설명 |
 | --- | --- | --- |
 | getWallet | `(): Wallet` | sessionStorage에서 지갑을 읽는다. 저장소가 비어 있으면(첫 로드) 아래 시드 데이터로 채운 뒤 반환한다 |
+
+**private**
+
+| 메서드 | 시그니처 | 설명 |
+| --- | --- | --- |
 | saveWallet | `(wallet: Wallet): void` | 결제 성공 또는 환불로 변경된 cash를 sessionStorage에 반영한다 |
 
 ## 시드 데이터(고정)

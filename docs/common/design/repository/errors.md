@@ -2,11 +2,19 @@
 
 Oct 6, 2026 · @DevYoung
 
-도메인 함수가 규칙 위반을 반환하는 모양과 에러 코드만 다룬다. 상황별 안내 문구는 [policy.md](../../planning/policy.md#오류-안내)가 정의한다.
+Repository 쓰기 메서드의 반환 모양(`Result`)과 에러 코드만 다룬다. 상황별 안내 문구는 [policy.md](../../planning/policy.md#오류-안내)가 정의한다.
 
 ## 반환 모양
 
-도메인 모듈(`src/domain/index.ts`)은 규칙 위반을 만나면 예외를 던지지 않고 아래 모양으로 반환한다.
+Repository의 쓰기 메서드([orders.md](./orders.md#메서드))와 그 안의 규칙 함수는 예외를 던지지 않고 `Result`를 반환한다. 서버 API의 공통 응답 형식에 해당한다.
+
+```ts
+type Result<T> =
+  | { ok: true; value: T }
+  | { ok: false; error: { code: ErrorCode; message: string } };
+```
+
+실패 예시:
 
 ```
 { ok: false, error: { code: "OUT_OF_STOCK", message: "재고가 부족합니다." } }
