@@ -2,7 +2,7 @@
 
 Oct 6, 2026 · @DevYoung
 
-재사용 컴포넌트를 어떻게 만드는지 규칙만 다룬다. 구체적으로 뭘 만들지는 구현 단계에서 정한다. 배치는 [wireframe.md](./wireframe.md), 데이터는 [docs/common/repository/](../repository/)를 따른다.
+재사용 컴포넌트를 어떻게 만드는지 규칙만 다룬다. 구체적으로 뭘 만들지는 구현 단계에서 정한다. 배치는 [wireframe.md](../../planning/wireframe.md), 데이터는 [design/repository/](../repository/)를 따른다.
 
 ## 원자 컴포넌트
 
@@ -27,3 +27,14 @@ src/components/
 ## 전역 요소 중복 금지
 
 라우트마다 반복되는 요소(에러 토스트, 보유 현금 표시 등)는 라우트별로 각각 구현하지 않고, 전역 레이아웃/전역 컴포넌트 하나로 통일해서 모든 라우트가 공유한다.
+
+## 디자인 토큰
+
+색상·radius 등 디자인 토큰은 각 프로젝트의 `src/index.css`(shadcn CSS 변수)와 `tailwind.config.js`가 기준이다.
+
+## 지정 컴포넌트
+
+| 용도 | 구현 |
+| --- | --- |
+| 전역 토스트 | sonner. `<Toaster />`를 `GlobalLayout`에 하나만 두고, `toast(message, { duration: 5000 })`로 띄운다 |
+| 헤더 보유 현금 아이콘 | lucide-react `Wallet` |

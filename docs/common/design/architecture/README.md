@@ -2,7 +2,7 @@
 
 Oct 7, 2026 · @DevYoung
 
-기술 스택 선택과 코드 구조를 다루는 디렉토리다. 데이터 계약은 [docs/common/repository/](../repository/), 화면은 [docs/common/ui/](../ui/)를 따른다.
+기술 스택 선택과 코드 구조를 다루는 디렉토리다. 데이터 계약은 [design/repository/](../repository/), 컴포넌트 규칙은 [design/ui/](../ui/), 화면은 [planning/](../../planning/)을 따른다.
 
 ## 목차
 

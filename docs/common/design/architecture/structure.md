@@ -2,7 +2,7 @@
 
 Oct 7, 2026 · @DevYoung
 
-코드가 어떤 폴더로 나뉘고, 데이터가 어떤 순서로 오가는지만 다룬다. 기술 선택은 [tech-stack.md](./tech-stack.md), 레포지토리 함수 계약은 [docs/common/repository/](../repository/)를 따른다.
+코드가 어떤 폴더로 나뉘고, 데이터가 어떤 순서로 오가는지만 다룬다. 기술 선택은 [tech-stack.md](./tech-stack.md), 저장 계약은 [design/repository/](../repository/), 규칙 함수는 [design/domain/](../domain/), 전역 상태와 액션은 [design/context/](../context/)를 따른다.
 
 ## 목차
 
@@ -36,13 +36,22 @@ src/
     common/                     # 여러 topic이 같이 쓰는 공통 모듈(예: Context 생성 헬퍼, 공통 타입)
       {placeholder}.ts
       index.ts
-    {topic}/
-      {placeholder}Context.tsx
+    wallet/
+      WalletContext.tsx         # cash 상태
+      index.ts
+    order/
+      OrderContext.tsx          # 주문 액션 6개
       index.ts
     index.ts
 
   repository/
     Repository.ts             # class Repository
+    index.ts                  # export const repository = new Repository()
+
+  domain/                     # 비즈니스 규칙 순수 함수, 저장소·화면을 모름
+    {topic}/
+      {placeholder}.ts
+      index.ts
     index.ts
 
   types/
@@ -73,7 +82,7 @@ src/
 ### 폴더 네이밍 규칙
 
 - `{topic}`/`{placeholder}`는 실제 작성 시 치환되는 자리표시자다. `{topic}`은 폴더명(주제), `{placeholder}`는 그 폴더 안 구현 파일명
-- pages/context/types/constants/utils/lib 공통 규칙: 주제당 폴더 하나, 폴더 안엔 구현 파일 + `index.ts`(barrel)
+- pages/context/domain/types/constants/utils/lib 공통 규칙: 주제당 폴더 하나, 폴더 안엔 구현 파일 + `index.ts`(barrel)
 - barrel은 2단이다 — 안쪽 `{topic}/index.ts`는 그 폴더 안 파일들을 모으고, 디렉토리 최상위 `index.ts`는 전체를 다시 재노출한다. 안쪽이 있어서 토픽 폴더 내부 파일 구성이 바뀌어도 최상위는 안 바뀐다
 
 
@@ -81,18 +90,12 @@ src/
 
 ```mermaid
 flowchart LR
-    subgraph Client["클라이언트"]
-        Page["페이지 컴포넌트"]
-        Toast["전역 토스트"]
-        Page -.->|"!res.ok"| Toast
-    end
-    subgraph Server["서버"]
-        Repo["Repository"]
-    end
-    subgraph DB["데이터베이스"]
-        Storage[("sessionStorage")]
-    end
-
-    Page <-->|요청 / 응답| Repo
-    Repo <--> Storage
+    Page["페이지"] -->|액션 호출| OrderCtx["OrderContext 액션"]
+    Page -->|읽기 전용 조회| Repo["repository (싱글턴)"]
+    OrderCtx --> Domain["domain 순수 함수"]
+    OrderCtx <-->|읽기 / 저장| Repo
+    OrderCtx -->|cash 갱신| WalletCtx["WalletContext"]
+    OrderCtx -.->|"실패 (쿠폰 코드 제외)"| Toast["전역 토스트"]
+    WalletCtx --> Header["헤더 보유 현금"]
+    Repo <--> Storage[("sessionStorage")]
 ```

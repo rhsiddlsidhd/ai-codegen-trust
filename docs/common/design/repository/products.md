@@ -7,7 +7,7 @@ Oct 6, 2026 · @DevYoung
 ## 목차
 
 - [타입](#타입)
-- [함수](#함수)
+- [메서드](#메서드)
 - [시드 데이터(고정)](#시드-데이터고정)
 
 ## 타입
@@ -38,12 +38,14 @@ StockMap = { [productId: string]: number }
 | key(productId) | string | 상품 id |
 | value(stock) | number | 해당 상품 현재 재고 |
 
-## 함수
+## 메서드
 
-| 함수 | 시그니처 | 설명 |
+`Repository`의 메서드다([README.md](./README.md)).
+
+| 메서드 | 시그니처 | 설명 |
 | --- | --- | --- |
 | getProducts | `(): Product[]` | sessionStorage에서 상품 목록을 읽는다. 저장소가 비어 있으면(첫 로드) 아래 시드 데이터로 채운 뒤 반환한다 |
-| updateStock | `(stock: StockMap): void` | 주문 생성·결제 실패·취소·환불 뒤 도메인 모듈이 계산한 새 `StockMap`을 sessionStorage에 반영한다 |
+| updateStock | `(stock: StockMap): void` | 도메인 함수가 계산한 새 `StockMap`으로 `products` 키의 각 `Product.stock`을 덮어쓴다 |
 
 ## 시드 데이터(고정)
 
