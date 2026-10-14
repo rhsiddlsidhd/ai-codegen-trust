@@ -2,7 +2,7 @@
 
 Oct 6, 2026 · @DevYoung
 
-화면과 사용자 행동, 분기만 다룬다. 레포지토리 호출 상세는 [docs/common/repository/](../repository/), 화면 배치는 [wireframe.md](./wireframe.md)를 따른다.
+화면과 사용자 행동, 분기만 다룬다. 화면 배치는 [wireframe.md](./wireframe.md)를 따른다.
 
 ## 플로우
 
@@ -17,15 +17,16 @@ flowchart TD
     PayCheck -->|아니오| Failed["/orders/:id<br/>영수증: 결제 실패"]
     PayCheck -->|예| Paid["/orders/:id<br/>영수증: 결제 완료"]
     Paid -->|환불 클릭| Refunded["/orders/:id<br/>영수증: 환불 완료"]
-    Paid --> End1([종료])
-    Refunded --> End2([종료])
-    Failed --> End3([종료])
+    Paid -->|장바구니로 클릭| Cart
+    Refunded -->|장바구니로 클릭| Cart
+    Failed -->|장바구니로 클릭| Cart
 
     DirectAccess([북마크 등으로<br/>직접 접근]) --> GuardCheck{주문 존재 &&<br/>이 라우트 상태 맞음?}
     GuardCheck -->|아니오| NotFound["주문 없음(404)<br/>장바구니로 버튼"]
     GuardCheck -->|예| Payment
     GuardCheck -->|예| Paid
     GuardCheck -->|예| Failed
+    GuardCheck -->|예| Refunded
     NotFound -->|장바구니로 클릭| Cart
 ```
 
@@ -33,18 +34,18 @@ flowchart TD
 
 | 분기 | 이유 |
 | --- | --- |
-| 생성 실패 시 `/cart`에 머무름 | 주문이 안 생겼으니 이동할 다음 화면이 없음 |
+| 생성 실패 시 `/cart`에 머무름 | 주문이 안 생겼으니 이동할 다음 화면이 없음. 실패 이유는 오류 안내 토스트로 보여줌 |
 | 취소 시 `/cart`로 돌아감(영수증 없음) | 결제 시도 자체가 없었던 거라 보여줄 이력이 없음 |
 | 결제 실패도 `/orders/:id`로 이동(영수증 있음) | 결제를 "시도"한 이력이라 실패 이유와 함께 남김 |
-| 직접 접근 시 가드 실패하면 자동 리다이렉트 대신 404 화면 | sessionStorage는 탭 닫으면 사라져서 북마크 재진입 시 주문이 없을 수 있음. 가드 규칙은 아래 [가드 규칙](#가드-규칙) |
+| 직접 접근 시 가드 실패하면 자동 리다이렉트 대신 404 화면 | 탭을 닫으면 주문 데이터가 사라져서 북마크 재진입 시 주문이 없을 수 있음. 가드 규칙은 아래 [가드 규칙](#가드-규칙) |
 
 ## 가드 규칙
 
-`/payment/:id`, `/orders/:id`는 진입 시 `getOrder(id)`로 주문을 읽고, 상태가 아래 "화면 표시"에 해당할 때만 그 라우트 화면을 보여준다. 나머지는 같은 URL 자리에서 주문 없음(404) 화면을 보여준다([wireframe.md](./wireframe.md#주문-없음404)).
+`/payment/:id`, `/orders/:id`는 진입 시 주문을 읽고, 상태가 아래 "화면 표시"에 해당할 때만 그 라우트 화면을 보여준다. 나머지는 같은 URL 자리에서 주문 없음(404) 화면을 보여준다([wireframe.md](./wireframe.md#주문-없음404)).
 
 | 라우트 | 화면 표시 | 404 |
 | --- | --- | --- |
-| `/payment/:id` | CREATED | 주문 없음, 그 외 모든 상태 |
-| `/orders/:id` | PAID, PAYMENT_FAILED, REFUNDED | 주문 없음, CREATED, CANCELED |
+| `/payment/:id` | 결제 대기 | 주문 없음, 그 외 모든 상태 |
+| `/orders/:id` | 결제 완료, 결제 실패, 환불 완료 | 주문 없음, 결제 대기, 주문 취소 |
 
-CANCELED가 404인 이유는 취소 분기와 같다 — 결제 시도 자체가 없었던 주문이라 보여줄 영수증이 없다.
+주문 취소가 404인 이유는 취소 분기와 같다 — 결제 시도 자체가 없었던 주문이라 보여줄 영수증이 없다.
