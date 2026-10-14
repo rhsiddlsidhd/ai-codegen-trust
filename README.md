@@ -8,7 +8,7 @@ Oct 5, 2026 · @DevYoung
 - [목적](#목적)
 - [배경](#배경)
 - [핵심 주장 (H0)](#핵심-주장-h0)
-- [설계 문서](./docs/common/design/) — 기술 스택·구조(`architecture/`), 타입·Repository 메서드·에러 코드(`repository/`), 규칙 함수·상태 전이(`domain/`), 전역 상태·주문 액션(`context/`). 기획은 [docs/common/planning/](./docs/common/planning/)
+- [설계 문서](./docs/common/design/) — 기술 스택·구조(`architecture/`), 타입·Repository 메서드(서버 역할)·규칙 함수·상태 전이·에러 코드(`repository/`), 전역 상태·주문 액션(`context/`). 기획은 [docs/common/planning/](./docs/common/planning/)
 
 ## 스토리
 
