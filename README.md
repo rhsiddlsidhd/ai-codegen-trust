@@ -8,7 +8,7 @@ Oct 5, 2026 · @DevYoung
 - [목적](#목적)
 - [배경](#배경)
 - [핵심 주장 (H0)](#핵심-주장-h0)
-- [레포지토리 명세](./docs/common/repository/) — 도메인별 함수 계약과 공통 에러 코드를 정리한 디렉토리. `products.md`(상품/재고 조회), `coupons.md`(쿠폰 조회·결제금액 계산), `orders.md`(주문 생성·조회·쿠폰 적용·결제·취소·환불), `wallet.md`(보유 현금 조회), `errors.md`(공통 에러 코드)
+- [레포지토리 명세](./docs/common/design/repository/) — 도메인별 함수 계약과 공통 에러 코드를 정리한 디렉토리. `products.md`(상품/재고 조회), `coupons.md`(쿠폰 조회·결제금액 계산), `orders.md`(주문 생성·조회·쿠폰 적용·결제·취소·환불), `wallet.md`(보유 현금 조회), `errors.md`(공통 에러 코드)
 
 ## 스토리
 
