@@ -10,3 +10,4 @@ Oct 14, 2026 · @DevYoung
 - [repository/](./repository/) — 타입, Repository 메서드(서버 역할), 규칙 함수, 상태 전이, Result·에러 코드, 저장 키, 시드 데이터
 - [context/](./context/) — 전역 상태(지갑), 주문 액션과 호출 흐름
 - [ui/components.md](./ui/components.md) — 컴포넌트 제작 규칙
+- [ui/routing.md](./ui/routing.md) — 라우트 테이블, 주문 라우트 진입 판정, 액션 결과에 따른 이동

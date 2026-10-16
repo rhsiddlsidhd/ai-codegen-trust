@@ -8,5 +8,5 @@ Oct 14, 2026 · @DevYoung
 
 - [overview.md](./overview.md) — 목표, 핵심 기능, MVP 제외 사항(PRD)
 - [policy.md](./policy.md) — 용어, 주문 수량, 쿠폰 규칙, 지갑, 재고·현금 차감/복원 시점, 오류 안내 문구, 결제 실패 사유
-- [user-flow.md](./user-flow.md) — 화면 간 이동, 분기, 가드 규칙
+- [user-flow.md](./user-flow.md) — 화면 간 이동, 분기, 상태별 화면 표시 규칙
 - [wireframe.md](./wireframe.md) — 라우트별 화면 레이아웃
